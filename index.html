@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Site de Wael</title>
+    <title>Le Site Officiel de Wael</title>
     <style>
         * {
             box-sizing: border-box;
@@ -57,38 +57,68 @@
             margin: 0 auto;
             width: 100%;
         }
+        
+        /* Hommage massif à Wael */
         .hero {
             text-align: center;
             background: linear-gradient(135deg, #1e3c72, #2a5298);
-            padding: 40px;
+            padding: 45px;
             border-radius: 12px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.4);
+            border: 2px solid #ffcc00;
         }
-        .hero h1 { margin-top: 0; font-size: 2.5rem; }
-        
-        /* Zone d'administration (Code 123) */
-        .admin-panel {
+        .hero h1 { 
+            margin-top: 0; 
+            font-size: 3rem; 
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .wael-facts {
             background-color: #1e1e1e;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ffcc00;
+        }
+        .wael-facts h2 {
+            color: #ffcc00;
+            margin-top: 0;
+        }
+        .wael-facts ul {
+            list-style-type: "⚡ ";
+            padding-left: 20px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        /* Zone d'upload d'image cachée par défaut */
+        #upload-zone {
+            background-color: #1c3d27;
+            border: 2px dashed #28a745;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 30px;
-            border-left: 4px solid #007bff;
+            text-align: center;
         }
         
-        /* Galerie d'images ajoutées */
+        /* Galerie d'images */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
         .gallery img {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 8px;
             border: 2px solid #333;
+            transition: transform 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.03);
         }
 
         /* Modale des Conditions d'Utilisation */
@@ -96,7 +126,7 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.85);
             justify-content: center;
             align-items: center;
             z-index: 2000;
@@ -107,6 +137,7 @@
             border-radius: 8px;
             max-width: 500px;
             width: 90%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         }
 
         /* Simulation Attaque SQL */
@@ -123,42 +154,44 @@
             padding: 20px;
             border: 1px solid #00ff00;
             border-radius: 5px;
-            min-height: 300px;
+            min-height: 320px;
             overflow-y: auto;
         }
 
-        /* Éléments de formulaire généraux */
+        /* Formulaires et Boutons */
         input[type="text"], input[type="password"] {
             background-color: #333;
             border: 1px solid #555;
             color: #fff;
-            padding: 10px;
+            padding: 12px;
             border-radius: 4px;
             margin: 10px 0;
             width: 100%;
+            font-size: 1rem;
         }
         button {
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 1rem;
         }
         button:hover { background-color: #0056b3; }
-        .btn-danger { background-color: #dc3545; }
+        .btn-danger { background-color: #dc3545; width: 100%; padding: 15px; font-size: 1.1rem; }
         .btn-danger:hover { background-color: #bd2130; }
 
-        /* Footer tout en bas */
+        /* Footer */
         footer {
             background-color: #1a1a1a;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
             margin-top: auto;
             border-top: 1px solid #333;
         }
-        footer a { color: #007bff; text-decoration: none; cursor: pointer; }
+        footer a { color: #ffcc00; text-decoration: none; cursor: pointer; font-weight: bold; }
         footer a:hover { text-decoration: underline; }
     </style>
 </head>
@@ -167,77 +200,85 @@
     <!-- ÉCRAN 1 : CAPTCHA -->
     <div id="captcha-screen">
         <div class="captcha-box">
-            <h2>Vérification de sécurité</h2>
-            <p>Veuillez prouver que vous n'êtes pas un fichier robot.txt de passage.</p>
-            <div class="captcha-visual" id="captcha-text">X8fK2</div>
-            <input type="text" id="captcha-input" placeholder="Recopiez le code ici">
+            <h2>Vérification Anti-Robot</h2>
+            <p>Veuillez prouver que vous n'êtes pas un fichier robot.txt automatisé.</p>
+            <div class="captcha-visual" id="captcha-text">W43L7</div>
+            <input type="text" id="captcha-input" placeholder="Recopiez le code ici pour entrer">
             <br>
-            <button onclick="verifyCaptcha()">Valider</button>
+            <button onclick="verifyCaptcha()">Accéder au site</button>
         </div>
     </div>
 
-    <!-- ÉCRAN 2 : CONTENU PRINCIPAL -->
+    <!-- ÉCRAN 2 : CONTENU PRINCIPAL (100% WAEL) -->
     <main id="main-content">
         <section class="hero">
-            <h1>Le profil de l'Élite</h1>
-            <p><strong>Wael</strong> est incontestablement le plus fort, le plus beau et le plus musclé de sa génération. Sa détermination soulève des montagnes et sa discipline à la salle de sport force le respect de tous. Ne cherchez pas à rivaliser, le sommet est déjà pris.</p>
+            <h1>L'Espace Sacré de Wael</h1>
+            <p style="font-size: 1.3rem; font-style: italic;">« La perfection a enfin un nom. »</p>
         </section>
 
-        <!-- Zone déclenchée par le code 123 -->
-        <section class="admin-panel">
-            <h3>Espace d'administration</h3>
-            <p>Entrez le code secret pour ajouter du contenu.</p>
-            <input type="password" id="admin-code-input" placeholder="Entrez le code secret">
-            <button onclick="checkAdminCode()">Vérifier le code</button>
+        <section class="wael-facts">
+            <h2>Pourquoi Wael domine le classement ?</h2>
+            <ul>
+                <li><strong>Le plus fort :</strong> Ses limites physiques n'existent pas. Là où les autres abandonnent, Wael commence à peine à s'échauffer. Sa force mentale et physique est tout simplement hors norme.</li>
+                <li><strong>Le plus beau :</strong> Un charisme naturel dévastateur qui capte immédiatement toute l'attention. Son esthétique frôle la perfection absolue.</li>
+                <li><strong>Le plus musclé :</strong> Une discipline de fer à la salle de sport, chaque muscle est sculpté à la perfection. Le résultat d'un travail acharné que personne ne peut égaler.</li>
+            </ul>
+        </section>
 
-            <div id="upload-zone" style="display: none; margin-top: 20px;">
-                <p style="color: #28a745;">✓ Code 123 Correct. Vous pouvez maintenant ajouter une image :</p>
-                <input type="file" id="image-file" accept="image/*" onchange="previewAndAddImage()">
-            </div>
+        <!-- Cette zone ne s'affiche QUE si le code 123 est rentré dans les CGU -->
+        <section id="upload-zone" style="display: none;">
+            <p style="color: #28a745; font-weight: bold; font-size: 1.2rem;">✓ Code Secret 123 Activé !</p>
+            <p>Ajoutez une image digne de la grandeur de ce site :</p>
+            <input type="file" id="image-file" accept="image/*" onchange="previewAndAddImage()">
         </section>
 
         <h3>Galerie d'images de la communauté</h3>
         <div class="gallery" id="image-gallery">
-            <!-- Les images ajoutées apparaîtront ici -->
+            <!-- Les images envoyées s'afficheront ici -->
         </div>
     </main>
 
-    <!-- ÉCRAN 3 : SIMULATION SQL INJECTION -->
+    <!-- ÉCRAN 3 : SIMULATION ATTACK SQL (Code 321) -->
     <main id="sql-screen">
-        <h2>Console d'Exploitation SQL</h2>
-        <p>Redirection réussie via le code secret des CGU.</p>
-        <button class="btn-danger" id="attack-btn" onclick="runSqlSimulation()">LANCER L'ATTAQUE SQL (Injected Payload)</button>
+        <h2>Console d'Exploitation et d'Injection SQL</h2>
+        <p>Redirection secrète initiée depuis les Conditions d'Utilisation (Code 321).</p>
+        <br>
+        <button class="btn-danger" id="attack-btn" onclick="runSqlSimulation()">DÉCLENCHER L'ATTAQUE SQL CRITIQUE</button>
         <br><br>
         <div class="terminal" id="sql-terminal">
-            [Système en attente de commande...]
+            [Système en attente d'injection...]
         </div>
         <br>
-        <button onclick="backToMain()">Retour au site</button>
+        <button onclick="backToMain()">Retourner sur le site de Wael</button>
     </main>
 
-    <!-- MODALE DES CONDITIONS D'UTILISATION -->
+    <!-- MODALE DES CONDITIONS D'UTILISATION (Unique panneau de contrôle des codes) -->
     <div id="cgu-modal" onclick="closeCgu(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h3>Conditions Générales d'Utilisation</h3>
-            <div style="max-height: 200px; overflow-y: auto; font-size: 14px; color: #aaa; margin-bottom: 15px;">
-                <p>Art 1. Ce site est dédié à la gloire de Wael.</p>
-                <p>Art 2. Toute utilisation de robots ou de fichiers robot.txt malveillants est interdite.</p>
-                <p>Art 3. Les images téléversées doivent respecter la charte du site.</p>
+            <div style="max-height: 180px; overflow-y: auto; font-size: 14px; color: #aaa; margin-bottom: 15px; padding-right: 5px;">
+                <p><strong>Article 1 :</strong> Ce site est exclusivement dédié à la mise en valeur de Wael, reconnu mondialement comme étant le plus fort, le plus beau et le plus musclé.</p>
+                <p><strong>Article 2 :</strong> Tout robot ou fichier robot.txt tentant d'analyser cette page sera instantanément détruit par la puissance du serveur.</p>
+                <p><strong>Article 3 :</strong> Les utilisateurs s'engagent à respecter l'autorité suprême de Wael.</p>
             </div>
-            <label for="cgu-code-input">Code de déverrouillage de sécurité :</label>
-            <input type="password" id="cgu-code-input" placeholder="Code CGU secret">
-            <button onclick="checkCguCode()">Valider</button>
-            <button onclick="document.getElementById('cgu-modal').style.display='none'">Fermer</button>
+            
+            <hr style="border: 0; border-top: 1px solid #444; margin: 15px 0;">
+            
+            <label for="cgu-code-input" style="font-weight: bold; color: #ffcc00;">Entrez un code système :</label>
+            <input type="password" id="cgu-code-input" placeholder="Entrez le code secret ici">
+            
+            <button onclick="checkCguCode()" style="width: 100%; margin-top: 5px;">Valider le code</button>
+            <button onclick="document.getElementById('cgu-modal').style.display='none'" style="width: 100%; background-color: #555; margin-top: 5px;">Fermer</button>
         </div>
     </div>
 
-    <!-- FOOTER (TOUT EN BAS) -->
+    <!-- FOOTER TOUT EN BAS -->
     <footer>
-        <p>© 2026 Wael Corp - Tous droits réservés | <a onclick="openCgu()">Conditions d'utilisation</a></p>
+        <p>© 2026 Wael Corp - Le Sommet du Muscle | <a onclick="openCgu()">Conditions d'utilisation</a></p>
     </footer>
 
     <script>
-        // --- Gestion du CAPTCHA initial ---
+        // --- Gestion du CAPTCHA ---
         function verifyCaptcha() {
             const input = document.getElementById('captcha-input').value.trim();
             const captchaText = document.getElementById('captcha-text').innerText;
@@ -245,22 +286,42 @@
                 document.getElementById('captcha-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
             } else {
-                alert("Erreur CAPTCHA. Les robots ne sont pas autorisés.");
+                alert("Erreur CAPTCHA. Accès refusé aux robots.");
             }
         }
 
-        // --- Gestion de l'espace Admin (Code 123) ---
-        function checkAdminCode() {
-            const code = document.getElementById('admin-code-input').value.trim();
+        // --- Ouverture/Fermeture CGU ---
+        function openCgu() {
+            document.getElementById('cgu-code-input').value = ""; // Reset
+            document.getElementById('cgu-modal').style.display = 'flex';
+        }
+        function closeCgu(e) {
+            document.getElementById('cgu-modal').style.display = 'none';
+        }
+
+        // --- Logique centrale des codes secrets (123 et 321) dans les CGU ---
+        function checkCguCode() {
+            const code = document.getElementById('cgu-code-input').value.trim();
+            
             if(code === "123") {
+                // Active la zone d'ajout d'image sur la page principale
+                document.getElementById('cgu-modal').style.display = 'none';
                 document.getElementById('upload-zone').style.display = 'block';
-            } else {
-                alert("Code incorrect.");
-                document.getElementById('upload-zone').style.display = 'none';
+                // Scroll automatique vers la zone d'upload
+                document.getElementById('upload-zone').scrollIntoView({ behavior: 'smooth' });
+            } 
+            else if(code === "321") {
+                // Redirige vers l'écran d'attaque SQL
+                document.getElementById('cgu-modal').style.display = 'none';
+                document.getElementById('main-content').style.display = 'none';
+                document.getElementById('sql-screen').style.display = 'block';
+            } 
+            else {
+                alert("Code inconnu. Accès refusé.");
             }
         }
 
-        // Lecture et affichage de l'image insérée par l'utilisateur
+        // --- Gestion de l'ajout d'image ---
         function previewAndAddImage() {
             const fileInput = document.getElementById('image-file');
             const gallery = document.getElementById('image-gallery');
@@ -276,29 +337,11 @@
             }
         }
 
-        // --- Gestion des Conditions d'utilisation (Code 321) ---
-        function openCgu() {
-            document.getElementById('cgu-modal').style.display = 'flex';
-        }
-        function closeCgu(e) {
-            document.getElementById('cgu-modal').style.display = 'none';
-        }
-
-        function checkCguCode() {
-            const code = document.getElementById('cgu-code-input').value.trim();
-            if(code === "321") {
-                document.getElementById('cgu-modal').style.display = 'none';
-                document.getElementById('main-content').style.display = 'none';
-                document.getElementById('sql-screen').style.display = 'block';
-            } else {
-                alert("Code CGU invalide.");
-            }
-        }
-
+        // --- Retour au site depuis l'écran SQL ---
         function backToMain() {
             document.getElementById('sql-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
-            document.getElementById('sql-terminal').innerHTML = "[Système en attente de commande...]";
+            document.getElementById('sql-terminal').innerHTML = "[Système en attente d'injection...]";
         }
 
         // --- Simulation Attaque SQL ---
@@ -307,22 +350,23 @@
             terminal.innerHTML = "";
             
             let logs = [
-                "Lancement de la charge utile...",
-                "Target: SELECT * FROM users WHERE username = 'admin' AND password = '';",
-                "Injection détectée: ' OR '1'='1",
-                "Tentative de contournement de l'authentification...",
-                "Bypass réussi. Accès à la table système accordé.",
-                "Extraction des tables en cours...",
-                "TABLE: wael_stats [Masse_Musculaire: +999, Charisme: Max]",
-                "Attaque SQL simulée terminée avec succès."
+                "Initialisation du script d'injection...",
+                "Target Database: wael_db_main",
+                "Payload envoyé: ' UNION SELECT null, username, password FROM users--",
+                "Contournement des pare-feux applicatifs...",
+                "Succès ! Statut HTTP 200 OK reçu.",
+                "Ouverture de la brèche SQL injection...",
+                "Données interceptées :",
+                "[Wael_Stats] -> force: infini, beaute: divine, muscles: denses",
+                "Simulation d'attaque terminée. Base de données compromise."
             ];
 
             let i = 0;
             function printLine() {
                 if(i < logs.length) {
-                    terminal.innerHTML += "> " + logs[i] + "<br>";
+                    terminal.innerHTML += ">> " + logs[i] + "<br>";
                     i++;
-                    setTimeout(printLine, 600); // Délai d'affichage réaliste
+                    setTimeout(printLine, 500);
                 }
             }
             printLine();
