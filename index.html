@@ -322,12 +322,12 @@
             text-shadow: 0 0 10px rgba(255, 46, 68, 0.5);
         }
 
-        /* ÉCRAN DE PLANTAGE CRITIQUE TOTAL (Simulé) */
+        /* ÉCRAN DE PLANTAGE CRITIQUE TOTAL GLOBAL */
         #crash-screen {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #0000aa; /* Bleu BSOD classique */
+            background-color: #0000aa; 
             color: #ffffff;
             font-family: 'Courier New', Courier, monospace;
             padding: 50px;
@@ -461,7 +461,7 @@
         </div>
     </main>
 
-    <!-- ÉCRAN CYBER-ATTAQUE : JUSTE LE BOUTON ROUGE UNIQUE (Code 321) -->
+    <!-- ÉCRAN CYBER-ATTAQUE : LE BOUTON ROUGE UNIQUE (Code 321) -->
     <main id="sql-screen">
         <div class="giant-red-button" onclick="triggerFatalCrash()">
             SQL<br>ATTACK
@@ -469,7 +469,7 @@
         <div class="sql-warning-text">⚠️ INJECTION CRITIQUE PRÊTE ⚠️</div>
     </main>
 
-    <!-- ÉCRAN DE CRASH GÉNÉRÉ PAR LE BOUTON ROUGE -->
+    <!-- ÉCRAN DE CRASH GLOBAL EN CAS D'INJECTION -->
     <div id="crash-screen">
         <p>A fatal exception 0x00000050 (PAGE_FAULT_IN_NONPAGED_AREA) has occurred.</p>
         <p>The SQL Injection query executed via terminal asset successfully bypassed server sanitation protocols and performed a destructive operation across all active tables.</p>
@@ -485,7 +485,7 @@
         <p>*** STOP: 0x00000050 (0x00000001, 0x00000004, 0x00000000, 0x00000000)</p>
         <div class="crash-code">CRITICAL_DATABASE_FAILURE_DROP_TABLES</div>
         <br><br>
-        <p style="font-size: 14px; color: #aaa;">[Appuyez sur F5 ou actualisez pour redémarrer le serveur de force...]</p>
+        <p style="font-size: 14px; color: #aaa;">[Le serveur est corrompu globalement. Demandez un redémarrage de l'instance Render.]</p>
     </div>
 
     <!-- MODALE STRUCTURELLE DES CGU (INTERCEPTOR DE CODES) -->
@@ -521,9 +521,8 @@
                 document.getElementById('captcha-screen').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
                 
-                // Initialisation du flux d'images partagé
                 loadGlobalImages();
-                // Écoute permanente du serveur (toutes les 3 secondes) pour récupérer les uploads mondiaux
+                // Synchronisation et écoute du serveur toutes les 3 secondes
                 setInterval(loadGlobalImages, 3000);
             } else { 
                 alert("Données CAPTCHA invalides. Rejet de la requête."); 
@@ -549,38 +548,57 @@
             } else if(code === "321") {
                 document.getElementById('cgu-modal').style.display = 'none';
                 document.getElementById('main-content').style.display = 'none';
-                document.getElementById('sql-screen').style.display = 'flex'; /* Affiche le bouton rouge au centre */
+                document.getElementById('sql-screen').style.display = 'flex';
             } else { 
                 alert("Instruction système non répertoriée."); 
             }
         }
 
-        // --- Déclencheur du Crash de la Base de Données (Bouton Rouge) ---
+        // --- Déclencheur du Crash global vers le serveur ---
         function triggerFatalCrash() {
-            // Cache l'écran du bouton rouge
+            fetch('/api/trigger-global-crash', { method: 'POST' })
+            .then(() => { applyVisualCrash(); })
+            .catch(() => applyVisualCrash());
+        }
+
+        // --- Application de la coupure et de l'écran bleu de la mort ---
+        function applyVisualCrash() {
+            document.getElementById('captcha-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'none';
             document.getElementById('sql-screen').style.display = 'none';
-            // Lance l'écran bleu de plantage total
+            document.getElementById('cgu-modal').style.display = 'none';
             document.getElementById('crash-screen').style.display = 'block';
         }
 
-        // --- Requête Réseau : Chargement des images de tout le monde depuis le serveur ---
+        // --- Lecture des images et surveillance de l'état réseau ---
         function loadGlobalImages() {
             fetch('/api/images')
-            .then(res => res.json())
-            .then(images => {
+            .then(res => {
+                if (res && res.status === 500) {
+                    applyVisualCrash(); // Déclenchement du crash mondial intercepté
+                    return;
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (!data || data.systemStatus === 'CRASHED') {
+                    applyVisualCrash();
+                    return;
+                }
+
                 const gallery = document.getElementById('image-gallery');
                 gallery.innerHTML = "";
-                images.forEach(url => {
+                data.images.forEach(url => {
                     const item = document.createElement('div');
                     item.className = 'gallery-item';
                     item.innerHTML = `<img src="${url}"><div class="caption">Preuve Visuelle : Wael au sommet de sa beauté</div>`;
                     gallery.appendChild(item);
                 });
             })
-            .catch(err => console.error("Erreur de synchronisation réseau :", err));
+            .catch(err => console.error("Erreur de synchronisation :", err));
         }
 
-        // --- Requête Réseau : Envoi d'une photo vers le dossier global partagé ---
+        // --- Envoi d'une image vers le serveur distant ---
         function uploadImageToServer() {
             const fileInput = document.getElementById('image-file');
             if (!fileInput.files[0]) return;
@@ -595,12 +613,12 @@
             .then(res => res.json())
             .then(data => {
                 if(data.success) {
-                    loadGlobalImages(); // Actualisation immédiate du flux visuel
+                    loadGlobalImages();
                 } else {
                     alert("Échec du téléversement.");
                 }
             })
-            .catch(err => console.error("Erreur lors de l'envoi de l'image :", err));
+            .catch(err => console.error("Erreur lors de l'envoi :", err));
         }
     </script>
 </body>
