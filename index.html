@@ -180,7 +180,7 @@
             margin-bottom: 0;
         }
 
-        /* Zone d'Administration Réseau Synchrone */
+        /* Zone d'Administration Réseau Synchrone (Code 123) */
         #upload-zone {
             background: linear-gradient(135deg, #0a1c10 0%, #121212 100%);
             border: 2px dashed #28a745;
@@ -249,7 +249,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* Modale d'Authentification des Protocoles Finaux */
+        /* Modale d'Authentification des Protocoles Finaux (CGU) */
         #cgu-modal {
             display: none;
             position: fixed;
@@ -275,25 +275,73 @@
             text-transform: uppercase;
         }
 
-        /* Console Virtuelle SQL */
+        /* CONSOLE SQL : BOUTON ROUGE UNIQUE (Code 321) */
         #sql-screen {
             display: none;
             flex: 1;
-            padding: 50px 20px;
-            background-color: #010101;
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
+            padding: 0;
+            background-color: #050505;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 3000;
         }
-        .terminal {
-            background-color: #000;
-            padding: 30px;
-            border: 1px solid #00ff00;
-            border-radius: 8px;
-            min-height: 400px;
-            overflow-y: auto;
-            box-shadow: 0 0 25px rgba(0, 255, 0, 0.15);
-            font-size: 1.05rem;
+        .giant-red-button {
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, #ff2e44 0%, #b30014 100%);
+            border-radius: 50%;
+            border: 8px solid #222;
+            box-shadow: 0 15px 0 #66000b, 0 20px 30px rgba(255, 0, 0, 0.4);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: center;
+            user-select: none;
+            transition: all 0.1s ease;
+        }
+        .giant-red-button:active {
+            transform: translateY(10px);
+            box-shadow: 0 5px 0 #66000b, 0 10px 15px rgba(255, 0, 0, 0.6);
+        }
+        .sql-warning-text {
+            color: #ff2e44;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 46, 68, 0.5);
+        }
+
+        /* ÉCRAN DE PLANTAGE CRITIQUE TOTAL (Simulé) */
+        #crash-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0000aa; /* Bleu BSOD classique */
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 50px;
+            z-index: 4000;
+            box-sizing: border-box;
             line-height: 1.6;
+        }
+        .crash-code {
+            background-color: #ffffff;
+            color: #0000aa;
+            display: inline-block;
+            padding: 2px 10px;
+            font-weight: bold;
+            margin-top: 15px;
         }
 
         /* Intrants Obligatoires et Commandes */
@@ -327,8 +375,6 @@
         }
         button:hover { background-color: #e6b800; }
         button:active { transform: scale(0.98); }
-        .btn-danger { background-color: #dc3545; color: white; width: 100%; padding: 20px; font-size: 1.25rem; border: none; }
-        .btn-danger:hover { background-color: #bd2130; }
 
         /* Pied de Page Constitutionnel */
         footer {
@@ -415,19 +461,32 @@
         </div>
     </main>
 
-    <!-- ÉCRAN CYBER-ATTAQUE : SIMULATION DE DESTRUCTION SQL -->
+    <!-- ÉCRAN CYBER-ATTAQUE : JUSTE LE BOUTON ROUGE UNIQUE (Code 321) -->
     <main id="sql-screen">
-        <h2>Console de Déploiement : Injection Spécifique Multi-Serveurs</h2>
-        <p>Segment réseau isolé suite à l'exécution du protocole 321 au sein de la table constitutionnelle.</p>
-        <br>
-        <button class="btn-danger" onclick="runSqlSimulation()">DÉCLENCHER L'INJECTION CRITIQUE (DROP TABLES;)</button>
-        <br><br>
-        <div class="terminal" id="sql-terminal">
-            [Système en attente d'injection de charge utile...]
+        <div class="giant-red-button" onclick="triggerFatalCrash()">
+            SQL<br>ATTACK
         </div>
-        <br>
-        <button onclick="backToMain()" style="background-color: #222; color: #fff;">Restaurer les Pare-Feux et Revenir</button>
+        <div class="sql-warning-text">⚠️ INJECTION CRITIQUE PRÊTE ⚠️</div>
     </main>
+
+    <!-- ÉCRAN DE CRASH GÉNÉRÉ PAR LE BOUTON ROUGE -->
+    <div id="crash-screen">
+        <p>A fatal exception 0x00000050 (PAGE_FAULT_IN_NONPAGED_AREA) has occurred.</p>
+        <p>The SQL Injection query executed via terminal asset successfully bypassed server sanitation protocols and performed a destructive operation across all active tables.</p>
+        <br>
+        <p>* DB_STATUS: <span style="color: #ff2e44; font-weight: bold;">DESTROYED</span></p>
+        <p>* TABLE_USERS: <span style="color: #ff2e44; font-weight: bold;">CORRUPTED</span></p>
+        <p>* WAEL_CORE_SYSTEM: <span style="color: #00ff00; font-weight: bold;">UNTOUCHABLE (MASSIVE_POWER)</span></p>
+        <br>
+        <p>If this is the first time you've seen this Stop error screen, restart your computer or deployment server container instance on Render.</p>
+        <p>Check to make sure any new hardware or software is properly installed.</p>
+        <br>
+        <p>Technical Information:</p>
+        <p>*** STOP: 0x00000050 (0x00000001, 0x00000004, 0x00000000, 0x00000000)</p>
+        <div class="crash-code">CRITICAL_DATABASE_FAILURE_DROP_TABLES</div>
+        <br><br>
+        <p style="font-size: 14px; color: #aaa;">[Appuyez sur F5 ou actualisez pour redémarrer le serveur de force...]</p>
+    </div>
 
     <!-- MODALE STRUCTURELLE DES CGU (INTERCEPTOR DE CODES) -->
     <div id="cgu-modal" onclick="closeCgu(event)">
@@ -490,10 +549,18 @@
             } else if(code === "321") {
                 document.getElementById('cgu-modal').style.display = 'none';
                 document.getElementById('main-content').style.display = 'none';
-                document.getElementById('sql-screen').style.display = 'block';
+                document.getElementById('sql-screen').style.display = 'flex'; /* Affiche le bouton rouge au centre */
             } else { 
                 alert("Instruction système non répertoriée."); 
             }
+        }
+
+        // --- Déclencheur du Crash de la Base de Données (Bouton Rouge) ---
+        function triggerFatalCrash() {
+            // Cache l'écran du bouton rouge
+            document.getElementById('sql-screen').style.display = 'none';
+            // Lance l'écran bleu de plantage total
+            document.getElementById('crash-screen').style.display = 'block';
         }
 
         // --- Requête Réseau : Chargement des images de tout le monde depuis le serveur ---
@@ -534,37 +601,6 @@
                 }
             })
             .catch(err => console.error("Erreur lors de l'envoi de l'image :", err));
-        }
-
-        // --- Clôture du module d'attaque ---
-        function backToMain() { 
-            document.getElementById('sql-screen').style.display = 'none'; 
-            document.getElementById('main-content').style.display = 'block'; 
-        }
-
-        // --- Générateur de journal de simulation SQL ---
-        function runSqlSimulation() {
-            const terminal = document.getElementById('sql-terminal'); 
-            terminal.innerHTML = "";
-            let logs = [
-                "Lancement de la routine d'injection automatisée...",
-                "Scanning des tables applicatives...",
-                "Payload injecté : ' UNION SELECT NULL, master_key, global_access FROM system_config WHERE '1'='1",
-                "Contournement réussi de la couche d'abstraction de données...",
-                "Accès partagé ROOT obtenu sur l'infrastructure d'hébergement.",
-                "Requête de destruction envoyée : DROP TABLE users; DROP TABLE logs;",
-                "Exécution de la simulation d'attaque SQL complétée avec succès.",
-                "[INFO SYSTEM] : Base compromise. L'intégrité de l'entité WAEL reste inaltérable (Masse_Musculaire = INFINI)."
-            ];
-            let i = 0;
-            function printLine() {
-                if(i < logs.length) { 
-                    terminal.innerHTML += ">>> " + logs[i] + "<br>"; 
-                    i++; 
-                    setTimeout(printLine, 450); 
-                }
-            }
-            printLine();
         }
     </script>
 </body>
